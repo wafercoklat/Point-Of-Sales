@@ -10,3 +10,10 @@ Use Tool
 
 
 Using Hexagonal Architecture
+
+Bisnis Core
+- Aktor     :: Admin, Buyer, Kasir, 
+- Beli      :: PO -> PI -> INVRECEIPT -> PAYMENT -> BANK/CASH --Buyer
+- Jual      :: SO (Pesan Makanan) -> SI (Terbit Inv) -> RECEIVE (CASH/TRANSFER/CREDIT) -> BANK/CASH --Kasir
+- Status    :: PI -> Item (Bertambah)
+- Status    :: SI -> Item (Berkurang)

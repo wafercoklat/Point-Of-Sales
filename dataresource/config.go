@@ -72,6 +72,7 @@ func (r *Repository) Create(data interface{}, query string) (int64, error) {
 		fmt.Printf("Database Error - Create - Cannot Insert Data. Err: %s", err)
 		return 0, err
 	}
+
 	return row.LastInsertId()
 }
 
