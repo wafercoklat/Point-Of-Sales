@@ -31,9 +31,9 @@ func New(dialect, dsn string, idleConn, maxConn int) (adapter.RepoAdapter, error
 	return &Repository{db}, nil
 }
 
-func (r *Repository) Close() {
-	r.db.Close()
-}
+// func (r *Repository) Close() {
+// 	r.db.Close()
+// }
 
 func (r *Repository) FindByID(id string, data interface{}, query string) (interface{}, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -102,18 +102,17 @@ func (r *Repository) Delete(id, query string) (int64, error) {
 	return row.RowsAffected()
 }
 
-func (r *Repository) Auth(uname string, model interface{}, tbl string) (interface{}, error) {
+func (r *Repository) Auth(uname, pass, query string, data interface{}) (interface{}, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	qry := fmt.Sprintf("SELECT UName, Password FROM %s WHERE UName = ? LIMIT 1", tbl)
-
-	err := r.db.GetContext(ctx, model, qry, uname)
+	err := r.db.GetContext(ctx, data, query, uname, pass)
 	// defer r.Close()
 
 	if err != nil {
-		return model, err
+		fmt.Printf("Database Error - FIND BY ID - Cannot Pull Data. Err: %s", err)
+		return nil, err
 	}
 
-	return model, nil
+	return data, nil
 }

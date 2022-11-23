@@ -2,7 +2,7 @@ package main
 
 import (
 	"STACK-GO/dataresource"
-	"STACK-GO/modules"
+	routes "STACK-GO/modules"
 	"fmt"
 	"log"
 	"os"
@@ -20,6 +20,7 @@ func main() {
 
 	// Database
 	DSN := os.Getenv("ADM_USER") + ":" + os.Getenv("ADM_PASS") + "@tcp(" + os.Getenv("IP_WHITELIST") + ":" + os.Getenv("PORT") + ")/" + os.Getenv("DATABASE") + "?parseTime=true"
+	fmt.Println(DSN)
 	database, err := dataresource.New(os.Getenv("DIALECT"), DSN, 10, 10)
 
 	if err != nil {
@@ -28,10 +29,10 @@ func main() {
 
 	// Modules
 	r := gin.New()
-	modules.New(r, database)
+	routes.InitializeRoutes(r, database)
 
 	// Running
-	if err := r.Run(":8099"); err != nil {
+	if err := r.Run("localhost:8019"); err != nil {
 		panic(err.Error())
 	}
 
