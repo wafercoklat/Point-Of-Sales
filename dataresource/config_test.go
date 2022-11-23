@@ -3,8 +3,10 @@ package dataresource_test
 import (
 	"STACK-GO/adapter"
 	"STACK-GO/dataresource"
-	domain "STACK-GO/modules/user/domain"
-	repo "STACK-GO/modules/user/repo"
+	domain "STACK-GO/modules/dt_user/domain"
+	repo "STACK-GO/modules/dt_user/repo"
+	loginDomain "STACK-GO/modules/io_loginregister/domain"
+	loginRepo "STACK-GO/modules/io_loginregister/repo"
 	"fmt"
 	"log"
 	"os"
@@ -97,6 +99,17 @@ func TestUser_FindByID_Fail(t *testing.T) {
 	t.Run(info, func(t *testing.T) {
 		Convey(info, t, func() {
 			_, err := database.Create(dt_create_fail, repo.QryCreate())
+			So(err, ShouldBeError)
+		})
+	})
+}
+
+func TestAuth(t *testing.T) {
+	info := "Test Fail FindbyID Method"
+	t.Run(info, func(t *testing.T) {
+		Convey(info, t, func() {
+			data, err := database.Auth("Admin", "12345", loginRepo.QryFindByUser(), &loginDomain.Login{})
+			fmt.Println(data.(*domain.LoginUser))
 			So(err, ShouldBeError)
 		})
 	})
